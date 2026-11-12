@@ -11,6 +11,8 @@
     str {src: u8}, [{basereg: u8}]+{offset: u8} => $08`8 @ src @ basereg  @ offset
     stw {reg: u8}, [{adr: u16}]                 => $09`8 @ reg @ $le(adr)
     stw {src: u8}, [{basereg: u8}]+{offset: u8} => $0A`8 @ src @ basereg  @ offset
+
+    mov {src: u8}, {dst: u8}                    => $0B`8 @ src @ dst
 }
 
 

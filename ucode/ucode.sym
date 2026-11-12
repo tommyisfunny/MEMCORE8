@@ -28,3 +28,4 @@ stw_adr = 0x1a1
 stw_reg_offset = 0x1b6
 stw_reg_offset.store_value = 0x1cc
 stw_reg_offset.crossed_page = 0x1d1
+mov_byte = 0x1d4

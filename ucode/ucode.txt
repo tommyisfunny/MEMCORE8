@@ -11,6 +11,7 @@
   10:0 |    8 | 01 87 ; jmp ALW, str_reg_offset
   12:0 |    9 | 01 a1 ; jmp ALW, stw_adr
   14:0 |    a | 01 b6 ; jmp ALW, stw_reg_offset
+  16:0 |    b | 01 d4 ; jmp ALW, mov_byte
  200:0 |  100 |       ; reset:
  200:0 |  100 | 80 a8 ; mov 0, A
  202:0 |  101 | 84 52 ; mov A, MEM[PCL]
@@ -243,3 +244,17 @@
  3a2:0 |  1d1 | b1 ac ; clc APLUSB, 1
  3a4:0 |  1d2 | 80 60 ; mov Y, ADRH
  3a6:0 |  1d3 | 01 cc ; jmp ALW, .store_value
+ 3a8:0 |  1d4 |       ; mov_byte:
+ 3a8:0 |  1d4 | 80 89 ; mov MEM[ADRREG], A / INCADR
+ 3aa:0 |  1d5 | 80 52 ; mov A, MEM[TMP0]
+ 3ac:0 |  1d6 | 80 89 ; mov MEM[ADRREG], A / INCADR
+ 3ae:0 |  1d7 | 81 52 ; mov A, MEM[TMP1]
+ 3b0:0 |  1d8 | 84 32 ; mov ADRL, MEM[PCL]
+ 3b2:0 |  1d9 | 85 12 ; mov ADRH, MEM[PCH]
+ 3b4:0 |  1da | 80 86 ; mov MEM[TMP0], ADRL
+ 3b6:0 |  1db | 80 a0 ; mov 0, ADRH
+ 3b8:0 |  1dc | 80 88 ; mov MEM[ADRREG], A
+ 3ba:0 |  1dd | 81 86 ; mov MEM[TMP1], ADRL
+ 3bc:0 |  1de | 80 a0 ; mov 0, ADRH
+ 3be:0 |  1df | 80 50 ; mov A, MEM[ADRREG]
+ 3c0:0 |  1e0 | 01 05 ; jmp ALW, fetch

@@ -2,7 +2,9 @@
 
 #bank code
 main:
-    lrw a0, #test
+    ldr a0, #$AA
+    mov a0, a3
+    mov a3, s7
 
     lrw a2, #$DEAD
     lrw a4, #$BEEF

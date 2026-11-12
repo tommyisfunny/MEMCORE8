@@ -26,6 +26,7 @@ jmp ALW, str_adr
 jmp ALW, str_reg_offset
 jmp ALW, stw_adr
 jmp ALW, stw_reg_offset
+jmp ALW, mov_byte
 
 ; ucode for the instructions
 #bank ucode
@@ -327,7 +328,7 @@ stw_adr:
 
     jmp ALW, fetch
 
-;
+; store a word from a register into memory, specified by a register + offset
 stw_reg_offset:
     mov MEM[ADRREG], A / INCADR ; get source register number
     mov A, MEM[TMP0]            ; save source register number
@@ -374,3 +375,28 @@ stw_reg_offset:
     clc APLUSB, 1               ; add 1 to higher base address byte
     mov Y, ADRH                 ; put higher final address byte into address register
     jmp ALW, .store_value
+
+; copies a byte from one register to another
+mov_byte:
+    mov MEM[ADRREG], A / INCADR ; get source register number
+    mov A, MEM[TMP0]            ; save source register number
+    mov MEM[ADRREG], A / INCADR ; get target address register number
+    mov A, MEM[TMP1]            ; save target address register number
+
+    mov ADRL, MEM[PCL]          ; save program counter
+    mov ADRH, MEM[PCH]          ;
+
+    mov MEM[TMP0], ADRL         ; put source register number in address register
+    mov 0, ADRH                 ;
+
+    mov MEM[ADRREG], A          ; get value
+
+    mov MEM[TMP1], ADRL         ; put target register number into address register
+    mov 0, ADRH                 ;
+
+    mov A, MEM[ADRREG]          ; save value to memory
+
+    jmp ALW, fetch
+
+; copies a word from one register to another
+mov_word:
