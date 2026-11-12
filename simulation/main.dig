@@ -14,7 +14,7 @@
     </entry>
     <entry>
       <string>preloadProgramFile</string>
-      <file>/home/oliver/Documents/selfbuildcpus/MEMCORE8/code/prog.bin</file>
+      <file>prog.bin</file>
     </entry>
   </attributes>
   <visualElements>
@@ -39,7 +39,7 @@
         </entry>
         <entry>
           <string>lastDataFile</string>
-          <file>/home/oliver/Documents/selfbuildcpus/MEMCORE8/ucode/ucode.bin</file>
+          <file>ucode.bin</file>
         </entry>
         <entry>
           <string>autoReload</string>
