@@ -16,6 +16,7 @@
     mvw {src: u8}, {dst: u8}                    => $0C`8 @ src @ dst
 
     inc {reg: u8}                               => $0D`8 @ reg
+    inw {reg: u8}                               => $0E`8 @ reg
 }
 
 

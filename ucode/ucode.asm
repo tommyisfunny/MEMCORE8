@@ -29,6 +29,7 @@ jmp ALW, stw_reg_offset
 jmp ALW, mov_byte
 jmp ALW, mov_word
 jmp ALW, inc_byte
+jmp ALW, inc_word
 
 ; ucode for the instructions
 #bank ucode
@@ -444,4 +445,35 @@ inc_byte:
     mov Y, MEM[ADRREG]          ; save value back into register
 
     jmp ALW, fetch
-    
+
+; increment word in register
+inc_word:
+    mov MEM[ADRREG], A / INCADR ; get register number
+    mov A, MEM[TMP0]            ; save register number
+
+    mov ADRL, MEM[PCL]          ; save program counter
+    mov ADRH, MEM[PCH]          ;
+
+    mov A, ADRL                 ; put register number into address register
+    mov 0, ADRH                 ;
+
+    mov MEM[ADRREG], A / INCADR ; get value low byte
+    mov A, MEM[TMP1]            ; save value low byte
+
+    mov MEM[ADRREG], ADRH       ; get value high byte and store in address register
+    mov MEM[TMP1], ADRL         ; put value low byte into address register
+
+    INCADR                      ; increment value in the address register
+
+    mov ADRL, MEM[TMP1]         ; save value low byte
+    mov ADRH, MEM[TMP2]         ; save value high byte
+
+    mov MEM[TMP0], ADRL         ; put register number into addresss register
+    mov 0, ADRH                 ;
+
+    mov MEM[TMP1], A            ; get value low byte
+    mov A, MEM[ADRREG] / INCADR ; store value low nyte in register
+    mov MEM[TMP2], A            ; get value high byte
+    mov A, MEM[ADRREG]          ; store value high byte in register
+
+    jmp ALW, fetch
