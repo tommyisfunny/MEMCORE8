@@ -4,6 +4,8 @@
 main:
     lrw a0, #test
 
+    stw a0, [test]
+
     lrw a2, #$DE
     lrw a3, #$AD
     lrw a4, #$12

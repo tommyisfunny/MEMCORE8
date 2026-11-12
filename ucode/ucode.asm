@@ -24,6 +24,7 @@ jmp ALW, lrw_adr
 jmp ALW, lrw_reg_offset
 jmp ALW, str_adr
 jmp ALW, str_reg_offset
+jmp ALW, stw_adr
 
 ; ucode for the instructions
 #bank ucode
@@ -243,8 +244,8 @@ str_adr:
 
     mov MEM[ADRREG], A          ; get value
 
-    mov MEM[TMP1], ADRL         ; put address value low byte into address register
-    mov MEM[TMP2], ADRH         ; put address value high byte into address register
+    mov MEM[TMP1], ADRL         ; put address low byte into address register
+    mov MEM[TMP2], ADRH         ; put address high byte into address register
 
     mov A, MEM[ADRREG]          ; save value into memory
 
@@ -292,3 +293,36 @@ str_reg_offset:
     clc APLUSB, 1               ; add 1 to higher base address byte
     mov Y, ADRH                 ; put higher final address byte into address register
     jmp ALW, .store_value
+
+; store a word from a register into memory
+stw_adr:
+    mov MEM[ADRREG], A / INCADR ; get register number
+    mov A, MEM[TMP0]            ; save register number
+    mov MEM[ADRREG], A / INCADR ; get address value low byte
+    mov A, MEM[TMP2]            ; save address value low byte
+    mov MEM[ADRREG], A / INCADR ; get address value high byte   
+    mov A, MEM[TMP3]            ; save address value high byte
+
+    mov ADRL, MEM[PCL]          ; save program counter
+    mov ADRH, MEM[PCH]          ;
+
+    mov MEM[TMP0], ADRL         ; put register number into address register
+    mov 0, ADRH                 ;
+
+    mov MEM[ADRREG], A / INCADR ; get value low byte
+    mov A, MEM[TMP0]            ; save value low byte
+
+    mov MEM[ADRREG], A           ; get value high byte
+    mov A, MEM[TMP1]            ; save value high byte
+
+    mov MEM[TMP2], ADRL         ; put address low byte into address register
+    mov MEM[TMP3], ADRH         ; put address high byte into address register
+    
+    mov MEM[TMP0], A            ; get value low byte
+    mov A, MEM[ADRREG] / INCADR ; store value low byte
+
+    mov MEM[TMP1], A            ; get value high byte
+    mov A, MEM[ADRREG]          ; store value high byte
+
+    jmp ALW, fetch
+

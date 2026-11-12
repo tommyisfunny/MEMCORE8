@@ -24,3 +24,4 @@ str_adr = 0x178
 str_reg_offset = 0x187
 str_reg_offset.store_value = 0x19b
 str_reg_offset.crossed_page = 0x19e
+stw_adr = 0x1a1
