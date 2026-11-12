@@ -13,6 +13,7 @@
     stw {src: u8}, [{basereg: u8}]+{offset: u8} => $0A`8 @ src @ basereg  @ offset
 
     mov {src: u8}, {dst: u8}                    => $0B`8 @ src @ dst
+    mvw {src: u8}, {dst: u8}                    => $0C`8 @ src @ dst
 }
 
 
