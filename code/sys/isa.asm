@@ -2,6 +2,7 @@
 #ruledef {
     ldr {reg: u8}, #{val: i8} =>  1`8 @ reg @ val
     ldr {reg: u8}, [{adr: u16}] =>  2`8 @ reg @ $le(adr)
+    ldr {target: u8}, [{adrreg: u8}]+{offset: u8} =>  3`8 @ target @ adrreg @ offset
 }
 
 

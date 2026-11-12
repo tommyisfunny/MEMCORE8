@@ -3,6 +3,7 @@
    0:0 |    0 | 01 03 ; jmp ALW, reset
    2:0 |    1 | 01 08 ; jmp ALW, ldr_const
    4:0 |    2 | 01 11 ; jmp ALW, ldr_adr
+   6:0 |    3 | 01 1f ; jmp ALW, ldr_reg_offset
  200:0 |  100 |       ; fetch:
  200:0 |  100 | 84 86 ; mov MEM[PCL], ADRL
  202:0 |  101 | 85 82 ; mov MEM[PCH], ADRH
@@ -23,31 +24,51 @@
  21c:0 |  10e | 80 a0 ; mov 0, ADRH
  21e:0 |  10f | 80 50 ; mov A, MEM[ADRREG]
  220:0 |  110 | 01 00 ; jmp ALW, fetch
-
-
-
-
-
  222:0 |  111 |       ; ldr_adr:
  222:0 |  111 | 80 89 ; mov MEM[ADRREG], A / INCADR
  224:0 |  112 | 80 52 ; mov A, MEM[TMP0]
-
  226:0 |  113 | 80 89 ; mov MEM[ADRREG], A / INCADR
  228:0 |  114 | 81 52 ; mov A, MEM[TMP1]
- 
  22a:0 |  115 | 80 89 ; mov MEM[ADRREG], A / INCADR
- 
  22c:0 |  116 | 84 32 ; mov ADRL, MEM[PCL]
  22e:0 |  117 | 85 12 ; mov ADRH, MEM[PCH]
- 
  230:0 |  118 | 81 86 ; mov MEM[TMP1], ADRL
  232:0 |  119 | 80 40 ; mov A, ADRH
- 
  234:0 |  11a | 80 88 ; mov MEM[ADRREG], A
- 
  236:0 |  11b | 80 86 ; mov MEM[TMP0], ADRL
  238:0 |  11c | 80 a0 ; mov 0, ADRH
- 
  23a:0 |  11d | 80 50 ; mov A, MEM[ADRREG]
- 
  23c:0 |  11e | 01 00 ; jmp ALW, fetch
+
+
+ 23e:0 |  11f |       ; ldr_reg_offset:
+ 23e:0 |  11f | 80 89 ; mov MEM[ADRREG], A / INCADR
+ 240:0 |  120 | 80 52 ; mov A, MEM[TMP0]
+ 242:0 |  121 | 80 89 ; mov MEM[ADRREG], A / INCADR
+ 244:0 |  122 | 81 52 ; mov A, MEM[TMP1]
+ 246:0 |  123 | 80 89 ; mov MEM[ADRREG], A / INCADR
+ 248:0 |  124 | 83 52 ; mov A, MEM[TMP3]
+
+ 24a:0 |  125 | 84 32 ; mov ADRL, MEM[PCL]
+ 24c:0 |  126 | 85 12 ; mov ADRH, MEM[PCH]
+ 
+ 24e:0 |  127 | 81 86 ; mov MEM[TMP1], ADRL
+ 250:0 |  128 | 80 a0 ; mov 0, ADRH
+ 252:0 |  129 | 80 89 ; mov MEM[ADRREG], A / INCADR
+ 254:0 |  12a | b3 8e ; clc APLUSB, MEM[TMP3]
+ 256:0 |  12b | 80 88 ; mov MEM[ADRREG], A
+ 258:0 |  12c | 80 64 ; mov Y, ADRL
+ 25a:0 |  12d | 21 34 ; jmp CAR, .crossed_page
+ 25c:0 |  12e | 80 40 ; mov A, ADRH
+
+ 25e:0 |  12f |       ; .get_value:
+ 25e:0 |  12f | 80 88 ; mov MEM[ADRREG], A
+ 260:0 |  130 | 80 86 ; mov MEM[TMP0], ADRL
+ 262:0 |  131 | 80 a0 ; mov 0, ADRH
+ 264:0 |  132 | 80 50 ; mov A, MEM[ADRREG]
+ 266:0 |  133 | 01 00 ; jmp ALW, fetch
+
+ 268:0 |  134 |       ; .crossed_page:
+ 268:0 |  134 | b1 ac ; clc APLUSB, 1
+ 26a:0 |  135 | 80 60 ; mov Y, ADRH
+ 26c:0 |  136 | 01 2f ; jmp ALW, .get_value
