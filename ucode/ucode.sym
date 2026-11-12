@@ -20,3 +20,4 @@ lrw_adr = 0x146
 lrw_reg_offset = 0x15a
 lrw_reg_offset.get_value = 0x16a
 lrw_reg_offset.crossed_page = 0x175
+str_adr = 0x178

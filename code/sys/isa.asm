@@ -6,6 +6,8 @@
     lrw {reg: u8},    #{val: i16}                 =>  4`8 @ reg    @ $le(val)
     lrw {reg: u8},    [{adr: u16}]                =>  5`8 @ reg    @ $le(adr)
     lrw {target: u8}, [{adrreg: u8}]+{offset: u8} =>  6`8 @ target @ adrreg   @ offset
+
+    str {reg: u8},    [{adr: u16}]                =>  7`8 @ reg    @ $le(adr)
 }
 
 

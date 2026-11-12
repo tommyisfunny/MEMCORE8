@@ -22,6 +22,7 @@ jmp ALW, ldr_reg_offset
 jmp ALW, lrw_const
 jmp ALW, lrw_adr
 jmp ALW, lrw_reg_offset
+jmp ALW, str_adr
 
 ; ucode for the instructions
 #bank ucode
@@ -223,3 +224,27 @@ lrw_reg_offset:
     clc APLUSB, 1               ; add 1 to higher base address byte
     mov Y, ADRH                 ; put higher final address byte into address register
     jmp ALW, .get_value
+
+; store a byte from a register into memory
+str_adr:
+    mov MEM[ADRREG], A / INCADR ; get register number
+    mov A, MEM[TMP0]            ; save register number
+    mov MEM[ADRREG], A / INCADR ; get address value low byte
+    mov A, MEM[TMP1]            ; save address value low byte
+    mov MEM[ADRREG], A / INCADR ; get address value high byte   
+    mov A, MEM[TMP2]            ; save address value high byte
+
+    mov ADRL, MEM[PCL]          ; save program counter
+    mov ADRH, MEM[PCH]          ;
+
+    mov MEM[TMP0], ADRL         ; put register number into address register
+    mov 0, ADRH                 ;
+
+    mov MEM[ADRREG], A          ; get value
+    
+    mov MEM[TMP1], ADRL         ; put address value low byte into address register
+    mov MEM[TMP2], ADRH         ; put address value high byte into address register
+
+    mov A, MEM[ADRREG]          ; save value into memory
+
+    jmp ALW, fetch
