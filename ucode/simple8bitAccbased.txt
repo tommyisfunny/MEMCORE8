@@ -1,0 +1,22 @@
+  outp | addr | data (base 16)
+
+   0:0 |    0 | 01 04 ; jmp ALW, reset
+   2:0 |    1 | 01 0a ; jmp ALW, lda_imm
+ 200:0 |  100 |       ; fetch:
+ 200:0 |  100 | 80 86 ; mov MEM[PCL], ADRL
+ 202:0 |  101 | 81 82 ; mov MEM[PCH], ADRH
+ 204:0 |  102 | 80 89 ; mov MEM[ADRREG], A : INCADR
+ 206:0 |  103 | 80 54 ; lir 0:A
+ 208:0 |  104 |       ; reset:
+ 208:0 |  104 | 80 a8 ; mov 0, A
+ 20a:0 |  105 | 81 52 ; mov A, MEM[PCH]
+ 20c:0 |  106 | 82 52 ; mov A, MEM[ACC]
+ 20e:0 |  107 | a0 ac ; clc AMINUSB, 0
+ 210:0 |  108 | 81 72 ; mov Y, MEM[PCH]
+ 212:0 |  109 | 01 00 ; jmp ALW, fetch
+ 214:0 |  10a |       ; lda_imm:
+ 214:0 |  10a | 80 89 ; mov MEM[ADRREG], A : INCADR
+ 216:0 |  10b | 82 52 ; mov A, MEM[ACC]
+ 218:0 |  10c | 80 32 ; mov ADRL, MEM[PCL]
+ 21a:0 |  10d | 81 12 ; mov ADRH, MEM[PCH]
+ 21c:0 |  10e | 01 00 ; jmp ALW, fetch

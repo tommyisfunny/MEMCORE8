@@ -1,0 +1,7 @@
+  outp | addr | data (base 16)
+
+   0:0 |    0 | 01 01 ; jmp ALW, reset
+ 200:0 |  100 |       ; fetch:
+ 200:0 |  100 | 01 00 ; jmp ALW, fetch
+ 202:0 |  101 |       ; reset:
+ 202:0 |  101 | 01 00 ; jmp ALW, fetch
