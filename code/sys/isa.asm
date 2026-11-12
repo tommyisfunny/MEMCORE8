@@ -1,6 +1,7 @@
 
 #ruledef {
-    ldr {reg: u8}, #{val: u8} =>  1`8 @ reg @ val
+    ldr {reg: u8}, #{val: i8} =>  1`8 @ reg @ val
+    ldr {reg: u8}, [{adr: u16}] =>  2`8 @ reg @ $le(adr)
 }
 
 

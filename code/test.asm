@@ -2,9 +2,8 @@
 
 #bank code
 main:
-    ldr a0, #$42
-    ldr a1, #$37
-    ldr t0, #$AA
-    ldr t5, #$55
-    ldr s6, #$99
-    ldr s7, #$88
+    ldr a0, [test]
+    ldr a1, [test+1]
+    ldr a2, [test+2]
+
+test: #d8 $AA, $BB, $12
