@@ -14,6 +14,8 @@
 
     mov {src: u8}, {dst: u8}                    => $0B`8 @ src @ dst
     mvw {src: u8}, {dst: u8}                    => $0C`8 @ src @ dst
+
+    inc {reg: u8}                               => $0D`8 @ reg
 }
 
 
