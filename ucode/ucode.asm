@@ -21,6 +21,7 @@ jmp ALW, ldr_adr
 jmp ALW, ldr_reg_offset
 jmp ALW, lrw_const
 jmp ALW, lrw_adr
+jmp ALW, lrw_reg_offset
 
 ; ucode for the instructions
 #bank ucode
@@ -187,4 +188,38 @@ lrw_reg_offset:
     mov ADRL, MEM[PCL]          ; save program counter
     mov ADRH, MEM[PCH]          ;
 
+    mov MEM[TMP1], ADRL         ; put base address register number into address register
+    mov 0, ADRH                 ;
+
+    mov MEM[ADRREG], A / INCADR ; get lower base address byte from base address register
+    clc APLUSB, MEM[TMP3]       ; add offset to lower base address byte
     
+    mov MEM[ADRREG], A          ; get higher base address byte from base address register
+
+    mov Y, ADRL                 ; put lower final address byte into address register
+    
+    jmp CAR, .crossed_page      ; check if adding the offset caused a page crossing
+
+    mov A, ADRH                 ; put higher final address byte into address register
+
+    .get_value:
+
+    mov MEM[ADRREG], A / INCADR ; get value low byte from memory
+    mov A, MEM[TMP2]            ; save value low byte
+    mov MEM[ADRREG], A          ; get value high byte from memory
+    mov A, MEM[TMP3]            ; save value high byte
+
+    mov MEM[TMP0], ADRL         ; put target register number into address register
+    mov 0, ADRH                 ;
+
+    mov MEM[TMP2], A            ; get value low byte
+    mov A, MEM[ADRREG] / INCADR ; save value low byte into target register
+    mov MEM[TMP3], A            ; get value high byte
+    mov A, MEM[ADRREG]          ; save value high byte into target register
+    
+    jmp ALW, fetch
+
+    .crossed_page:
+    clc APLUSB, 1               ; add 1 to higher base address byte
+    mov Y, ADRH                 ; put higher final address byte into address register
+    jmp ALW, .get_value

@@ -6,6 +6,7 @@
    6:0 |    3 | 01 1f ; jmp ALW, ldr_reg_offset
    8:0 |    4 | 01 37 ; jmp ALW, lrw_const
    a:0 |    5 | 01 46 ; jmp ALW, lrw_adr
+   c:0 |    6 | 01 5a ; jmp ALW, lrw_reg_offset
  200:0 |  100 |       ; reset:
  200:0 |  100 | 80 a8 ; mov 0, A
  202:0 |  101 | 84 52 ; mov A, MEM[PCL]
@@ -105,3 +106,36 @@
  2ae:0 |  157 | 83 8a ; mov MEM[TMP3], A
  2b0:0 |  158 | 80 50 ; mov A, MEM[ADRREG]
  2b2:0 |  159 | 01 05 ; jmp ALW, fetch
+ 2b4:0 |  15a |       ; lrw_reg_offset:
+ 2b4:0 |  15a | 80 89 ; mov MEM[ADRREG], A / INCADR
+ 2b6:0 |  15b | 80 52 ; mov A, MEM[TMP0]
+ 2b8:0 |  15c | 80 89 ; mov MEM[ADRREG], A / INCADR
+ 2ba:0 |  15d | 81 52 ; mov A, MEM[TMP1]
+ 2bc:0 |  15e | 80 89 ; mov MEM[ADRREG], A / INCADR
+ 2be:0 |  15f | 83 52 ; mov A, MEM[TMP3]
+ 2c0:0 |  160 | 84 32 ; mov ADRL, MEM[PCL]
+ 2c2:0 |  161 | 85 12 ; mov ADRH, MEM[PCH]
+ 2c4:0 |  162 | 81 86 ; mov MEM[TMP1], ADRL
+ 2c6:0 |  163 | 80 a0 ; mov 0, ADRH
+ 2c8:0 |  164 | 80 89 ; mov MEM[ADRREG], A / INCADR
+ 2ca:0 |  165 | b3 8e ; clc APLUSB, MEM[TMP3]
+ 2cc:0 |  166 | 80 88 ; mov MEM[ADRREG], A
+ 2ce:0 |  167 | 80 64 ; mov Y, ADRL
+ 2d0:0 |  168 | 21 75 ; jmp CAR, .crossed_page
+ 2d2:0 |  169 | 80 40 ; mov A, ADRH
+ 2d4:0 |  16a |       ; .get_value:
+ 2d4:0 |  16a | 80 89 ; mov MEM[ADRREG], A / INCADR
+ 2d6:0 |  16b | 82 52 ; mov A, MEM[TMP2]
+ 2d8:0 |  16c | 80 88 ; mov MEM[ADRREG], A
+ 2da:0 |  16d | 83 52 ; mov A, MEM[TMP3]
+ 2dc:0 |  16e | 80 86 ; mov MEM[TMP0], ADRL
+ 2de:0 |  16f | 80 a0 ; mov 0, ADRH
+ 2e0:0 |  170 | 82 8a ; mov MEM[TMP2], A
+ 2e2:0 |  171 | 80 51 ; mov A, MEM[ADRREG] / INCADR
+ 2e4:0 |  172 | 83 8a ; mov MEM[TMP3], A
+ 2e6:0 |  173 | 80 50 ; mov A, MEM[ADRREG]
+ 2e8:0 |  174 | 01 05 ; jmp ALW, fetch
+ 2ea:0 |  175 |       ; .crossed_page:
+ 2ea:0 |  175 | b1 ac ; clc APLUSB, 1
+ 2ec:0 |  176 | 80 60 ; mov Y, ADRH
+ 2ee:0 |  177 | 01 6a ; jmp ALW, .get_value
