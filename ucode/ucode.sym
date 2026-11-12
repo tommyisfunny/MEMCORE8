@@ -15,3 +15,4 @@ ldr_adr = 0x111
 ldr_reg_offset = 0x11f
 ldr_reg_offset.get_value = 0x12f
 ldr_reg_offset.crossed_page = 0x134
+lrw_const = 0x137

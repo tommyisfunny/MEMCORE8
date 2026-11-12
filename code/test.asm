@@ -2,8 +2,7 @@
 
 #bank code
 main:
-    ldr a0, #$FF
-    ldr a1, #$2C
+    lrw a0, #test
 
     ldr a2, [a0]+0
     ldr a3, [a0]+1

@@ -19,6 +19,7 @@ jmp ALW, reset
 jmp ALW, ldr_const
 jmp ALW, ldr_adr
 jmp ALW, ldr_reg_offset
+jmp ALW, lrw_const
 
 ; ucode for the instructions
 #bank ucode
@@ -44,7 +45,7 @@ fetch:
                                 ; fetching any additional bytes they need
 
 
-; load a constant into a register
+; load a byte constant into a register
 ldr_const:
     mov MEM[ADRREG], A / INCADR ; get register number
     mov A, MEM[TMP0]            ; save register number
@@ -59,7 +60,7 @@ ldr_const:
     
     jmp ALW, fetch
 
-; load a value from memory into a register
+; load a byte from memory into a register
 ldr_adr:
     mov MEM[ADRREG], A / INCADR ; get register number
     mov A, MEM[TMP0]            ; save register number
@@ -81,7 +82,7 @@ ldr_adr:
 
     jmp ALW, fetch
 
-; load a value from memory, specified by a register + offset, into a register
+; load a byte from memory, specified by a register + offset, into a register
 ldr_reg_offset:
     mov MEM[ADRREG], A / INCADR ; get target register number
     mov A, MEM[TMP0]            ; save target register number
@@ -120,3 +121,25 @@ ldr_reg_offset:
     clc APLUSB, 1               ; add 1 to higher base address byte
     mov Y, ADRH                 ; put higher final address byte into address register
     jmp ALW, .get_value
+
+; load a word constant into a register
+lrw_const:
+    mov MEM[ADRREG], A / INCADR ; get register number
+    mov A, MEM[TMP0]            ; save register number
+    mov MEM[ADRREG], A / INCADR ; get constant value low byte
+    mov A, MEM[TMP1]            ; save constant value low byte
+    mov MEM[ADRREG], A / INCADR ; get constant value high byte
+    mov A, MEM[TMP2]            ; save constant value high byte
+
+    mov ADRL, MEM[PCL]          ; save program counter
+    mov ADRH, MEM[PCH]          ;
+
+    mov MEM[TMP0], ADRL         ; put register number into address register
+    mov 0, ADRH                 ;
+    
+    mov MEM[TMP1], A            ; get constant value low byte
+    mov A, MEM[ADRREG] / INCADR ; save constant value low byte into register
+    mov MEM[TMP2], A            ; get constant value high byte
+    mov A, MEM[ADRREG]          ; save constant value high byte into register
+
+    jmp ALW, fetch
