@@ -175,3 +175,16 @@ lrw_adr:
 
     jmp ALW, fetch
 
+; load a word from memory, specified by a register + offset, into a register
+lrw_reg_offset:
+    mov MEM[ADRREG], A / INCADR ; get target register number
+    mov A, MEM[TMP0]            ; save target register number
+    mov MEM[ADRREG], A / INCADR ; get base address register number
+    mov A, MEM[TMP1]            ; save base address register number
+    mov MEM[ADRREG], A / INCADR ; get offset value
+    mov A, MEM[TMP3]            ; save offset value
+
+    mov ADRL, MEM[PCL]          ; save program counter
+    mov ADRH, MEM[PCH]          ;
+
+    
