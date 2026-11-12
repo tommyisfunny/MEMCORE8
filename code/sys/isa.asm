@@ -1,15 +1,16 @@
 
 #ruledef {
-    ldr {reg: u8}, #{val: i8}                   => 1`8 @ reg @ val
-    ldr {reg: u8}, [{adr: u16}]                 => 2`8 @ reg @ $le(adr)
-    ldr {dst: u8}, [{basereg: u8}]+{offset: u8} => 3`8 @ dst @ basereg  @ offset
-    lrw {reg: u8}, #{val: i16}                  => 4`8 @ reg @ $le(val)
-    lrw {reg: u8}, [{adr: u16}]                 => 5`8 @ reg @ $le(adr)
-    lrw {dst: u8}, [{basereg: u8}]+{offset: u8} => 6`8 @ dst @ basereg  @ offset
+    ldr {reg: u8}, #{val: i8}                   => $01`8 @ reg @ val
+    ldr {reg: u8}, [{adr: u16}]                 => $02`8 @ reg @ $le(adr)
+    ldr {dst: u8}, [{basereg: u8}]+{offset: u8} => $03`8 @ dst @ basereg  @ offset
+    lrw {reg: u8}, #{val: i16}                  => $04`8 @ reg @ $le(val)
+    lrw {reg: u8}, [{adr: u16}]                 => $05`8 @ reg @ $le(adr)
+    lrw {dst: u8}, [{basereg: u8}]+{offset: u8} => $06`8 @ dst @ basereg  @ offset
 
-    str {reg: u8}, [{adr: u16}]                 => 7`8 @ reg @ $le(adr)
-    str {src: u8}, [{basereg: u8}]+{offset: u8} => 8`8 @ src @ basereg  @ offset
-    stw {reg: u8}, [{adr: u16}]                 => 9`8 @ reg @ $le(adr)
+    str {reg: u8}, [{adr: u16}]                 => $07`8 @ reg @ $le(adr)
+    str {src: u8}, [{basereg: u8}]+{offset: u8} => $08`8 @ src @ basereg  @ offset
+    stw {reg: u8}, [{adr: u16}]                 => $09`8 @ reg @ $le(adr)
+    stw {src: u8}, [{basereg: u8}]+{offset: u8} => $0A`8 @ src @ basereg  @ offset
 }
 
 
