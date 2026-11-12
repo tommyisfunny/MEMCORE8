@@ -5,6 +5,7 @@
    4:0 |    2 | 01 11 ; jmp ALW, ldr_adr
    6:0 |    3 | 01 1f ; jmp ALW, ldr_reg_offset
    8:0 |    4 | 01 37 ; jmp ALW, lrw_const
+   a:0 |    5 | 01 46 ; jmp ALW, lrw_adr
  200:0 |  100 |       ; reset:
  200:0 |  100 | 80 a8 ; mov 0, A
  202:0 |  101 | 84 52 ; mov A, MEM[PCL]
@@ -83,3 +84,24 @@
  286:0 |  143 | 82 8a ; mov MEM[TMP2], A
  288:0 |  144 | 80 50 ; mov A, MEM[ADRREG]
  28a:0 |  145 | 01 05 ; jmp ALW, fetch
+ 28c:0 |  146 |       ; lrw_adr:
+ 28c:0 |  146 | 80 89 ; mov MEM[ADRREG], A / INCADR
+ 28e:0 |  147 | 80 52 ; mov A, MEM[TMP0]
+ 290:0 |  148 | 80 89 ; mov MEM[ADRREG], A / INCADR
+ 292:0 |  149 | 81 52 ; mov A, MEM[TMP1]
+ 294:0 |  14a | 80 89 ; mov MEM[ADRREG], A / INCADR
+ 296:0 |  14b | 84 32 ; mov ADRL, MEM[PCL]
+ 298:0 |  14c | 85 12 ; mov ADRH, MEM[PCH]
+ 29a:0 |  14d | 81 86 ; mov MEM[TMP1], ADRL
+ 29c:0 |  14e | 80 40 ; mov A, ADRH
+ 29e:0 |  14f | 80 89 ; mov MEM[ADRREG], A / INCADR
+ 2a0:0 |  150 | 82 52 ; mov A, MEM[TMP2]
+ 2a2:0 |  151 | 80 88 ; mov MEM[ADRREG], A
+ 2a4:0 |  152 | 83 52 ; mov A, MEM[TMP3]
+ 2a6:0 |  153 | 80 86 ; mov MEM[TMP0], ADRL
+ 2a8:0 |  154 | 80 a0 ; mov 0, ADRH
+ 2aa:0 |  155 | 82 8a ; mov MEM[TMP2], A
+ 2ac:0 |  156 | 80 51 ; mov A, MEM[ADRREG] / INCADR
+ 2ae:0 |  157 | 83 8a ; mov MEM[TMP3], A
+ 2b0:0 |  158 | 80 50 ; mov A, MEM[ADRREG]
+ 2b2:0 |  159 | 01 05 ; jmp ALW, fetch

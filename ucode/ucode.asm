@@ -20,6 +20,7 @@ jmp ALW, ldr_const
 jmp ALW, ldr_adr
 jmp ALW, ldr_reg_offset
 jmp ALW, lrw_const
+jmp ALW, lrw_adr
 
 ; ucode for the instructions
 #bank ucode
@@ -143,3 +144,34 @@ lrw_const:
     mov A, MEM[ADRREG]          ; save constant value high byte into register
 
     jmp ALW, fetch
+
+; load a word from memory into a register
+lrw_adr:
+    mov MEM[ADRREG], A / INCADR ; get register number
+    mov A, MEM[TMP0]            ; save register number
+    mov MEM[ADRREG], A / INCADR ; get address value low byte
+    mov A, MEM[TMP1]            ; save address value low byte
+    mov MEM[ADRREG], A / INCADR ; get address value high byte
+
+    mov ADRL, MEM[PCL]          ; save program counter
+    mov ADRH, MEM[PCH]          ;
+
+    mov MEM[TMP1], ADRL         ; put address value low byte into address register
+    mov A, ADRH                 ; put address value high byte into address register
+
+    mov MEM[ADRREG], A / INCADR ; get value low byte from memory
+    mov A, MEM[TMP2]            ; save value low byte
+    mov MEM[ADRREG], A          ; get value high byte from memory
+    mov A, MEM[TMP3]            ; save value high byte
+
+    mov MEM[TMP0], ADRL         ; put register number into address register
+    mov 0, ADRH                 ;
+
+    mov MEM[TMP2], A            ; get value low byte
+    mov A, MEM[ADRREG] / INCADR ; save value low byte into register
+
+    mov MEM[TMP3], A            ; get value high byte
+    mov A, MEM[ADRREG]          ; save value high byte into register
+
+    jmp ALW, fetch
+
