@@ -23,6 +23,7 @@ jmp ALW, lrw_const
 jmp ALW, lrw_adr
 jmp ALW, lrw_reg_offset
 jmp ALW, str_adr
+jmp ALW, str_reg_offset
 
 ; ucode for the instructions
 #bank ucode
@@ -241,10 +242,53 @@ str_adr:
     mov 0, ADRH                 ;
 
     mov MEM[ADRREG], A          ; get value
-    
+
     mov MEM[TMP1], ADRL         ; put address value low byte into address register
     mov MEM[TMP2], ADRH         ; put address value high byte into address register
 
     mov A, MEM[ADRREG]          ; save value into memory
 
     jmp ALW, fetch
+
+; store a byte from a register into memory, specified by a register + offset
+str_reg_offset:
+    mov MEM[ADRREG], A / INCADR ; get source register number
+    mov A, MEM[TMP0]            ; save source register number
+    mov MEM[ADRREG], A / INCADR ; get base address register number
+    mov A, MEM[TMP1]            ; save base address register number
+    mov MEM[ADRREG], A / INCADR ; get offset value
+    mov A, MEM[TMP3]            ; save offset value
+
+    mov ADRL, MEM[PCL]          ; save program counter
+    mov ADRH, MEM[PCH]          ;
+
+    mov MEM[TMP0], ADRL         ; put source register number into address register
+    mov 0, ADRH                 ;
+
+    mov MEM[ADRREG], A          ; get value from register
+    mov A, MEM[TMP0]            ; save value
+
+    mov MEM[TMP1], ADRL         ; put base address register number into address register
+    mov 0, ADRH                 ;
+
+    mov MEM[ADRREG], A / INCADR ; get lower base address byte from base address register
+    clc APLUSB, MEM[TMP3]       ; add offset to lower base address byte
+    
+    mov MEM[ADRREG], A          ; get higher base address byte from base address register
+
+    mov Y, ADRL                 ; put lower final address byte into address register
+    
+    jmp CAR, .crossed_page      ; check if adding the offset caused a page crossing
+
+    mov A, ADRH                 ; put higher final address byte into address register
+
+    .store_value:
+    mov MEM[TMP0], A            ; get value
+    mov A, MEM[ADRREG]          ; save value into memory
+
+    jmp ALW, fetch
+
+    .crossed_page:
+    clc APLUSB, 1               ; add 1 to higher base address byte
+    mov Y, ADRH                 ; put higher final address byte into address register
+    jmp ALW, .store_value
