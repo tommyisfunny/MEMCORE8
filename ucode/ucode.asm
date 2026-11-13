@@ -30,6 +30,7 @@ jmp ALW, mov_byte
 jmp ALW, mov_word
 jmp ALW, inc_byte
 jmp ALW, inc_word
+jmp ALW, dec_byte
 
 ; ucode for the instructions
 #bank ucode
@@ -475,5 +476,21 @@ inc_word:
     mov A, MEM[ADRREG] / INCADR ; store value low nyte in register
     mov MEM[TMP2], A            ; get value high byte
     mov A, MEM[ADRREG]          ; store value high byte in register
+
+    jmp ALW, fetch
+
+; decrement word in register
+dec_byte:
+    mov MEM[ADRREG], A / INCADR ; get register number
+
+    mov ADRL, MEM[PCL]          ; save program counter
+    mov ADRH, MEM[PCH]          ;
+
+    mov A, ADRL                 ; put register number into address register
+    mov 0, ADRH                 ;
+
+    mov MEM[ADRREG], A          ; get the value
+    clc AMINUSB, 0              ; sub 1
+    mov Y, MEM[ADRREG]          ; save value back into register
 
     jmp ALW, fetch

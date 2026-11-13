@@ -17,6 +17,8 @@
 
     inc {reg: u8}                               => $0D`8 @ reg
     inw {reg: u8}                               => $0E`8 @ reg
+
+    dec {reg: u8}                               => $0F`8 @ reg
 }
 
 
