@@ -19,6 +19,7 @@
     inw {reg: u8}                               => $0E`8 @ reg
 
     dec {reg: u8}                               => $0F`8 @ reg
+    dew {reg: u8}                               => $10`8 @ reg
 }
 
 

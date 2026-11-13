@@ -31,6 +31,7 @@ jmp ALW, mov_word
 jmp ALW, inc_byte
 jmp ALW, inc_word
 jmp ALW, dec_byte
+jmp ALW, dec_word
 
 ; ucode for the instructions
 #bank ucode
@@ -479,7 +480,7 @@ inc_word:
 
     jmp ALW, fetch
 
-; decrement word in register
+; decrement byte in register
 dec_byte:
     mov MEM[ADRREG], A / INCADR ; get register number
 
@@ -492,5 +493,28 @@ dec_byte:
     mov MEM[ADRREG], A          ; get the value
     clc AMINUSB, 0              ; sub 1
     mov Y, MEM[ADRREG]          ; save value back into register
+
+    jmp ALW, fetch
+
+; decrement word in register
+dec_word:
+    mov MEM[ADRREG], A / INCADR ; get register number
+    
+    mov ADRL, MEM[PCL]          ; save program counter
+    mov ADRH, MEM[PCH]          ;
+
+    mov A, ADRL                 ; put register number in address register
+    mov 0, ADRH                 ;
+
+    mov MEM[ADRREG], A          ; get value low byte
+    clc AMINUSB, 0              ; subtract 1
+    mov Y, MEM[ADRREG] / INCADR ; save value low byte back into the register
+
+    jmp CAR, fetch              ; if carry is set, there was no underflow 
+                                ; and we dont need to decrement the high byte
+
+    mov MEM[ADRREG], A          ; get value high byte
+    clc AMINUSB, 0              ; subtract 1 from the values high byte
+    mov Y, MEM[ADRREG]          ; save the value high byte back into the register
 
     jmp ALW, fetch

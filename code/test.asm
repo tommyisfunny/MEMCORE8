@@ -2,8 +2,8 @@
 
 #bank code
 main:
-    ldr a0, #$12
-    dec a0
-    dec a2
+    lrw a0, #$1200
+    dew a0
+    dew a0
 #addr $01FF
 test: #res 6
