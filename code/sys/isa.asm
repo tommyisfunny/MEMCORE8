@@ -20,6 +20,8 @@
 
     dec {reg: u8}                               => $0F`8 @ reg
     dew {reg: u8}                               => $10`8 @ reg
+
+    add {dst: u8}, {src: u8}                    => $11`8 @ dst @ src
 }
 
 

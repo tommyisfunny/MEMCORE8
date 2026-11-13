@@ -17,6 +17,7 @@
   1c:0 |    e | 01 fd ; jmp ALW, inc_word
   1e:0 |    f | 02 0b ; jmp ALW, dec_byte
   20:0 |   10 | 02 14 ; jmp ALW, dec_word
+  22:0 |   11 | 02 21 ; jmp ALW, add_byte
  200:0 |  100 |       ; reset:
  200:0 |  100 | 80 a8 ; mov 0, A
  202:0 |  101 | 84 52 ; mov A, MEM[PCL]
@@ -333,3 +334,17 @@
  43c:0 |  21e | a0 ac ; clc AMINUSB, 0
  43e:0 |  21f | 80 70 ; mov Y, MEM[ADRREG]
  440:0 |  220 | 01 05 ; jmp ALW, fetch
+ 442:0 |  221 |       ; add_byte:
+ 442:0 |  221 | 80 89 ; mov MEM[ADRREG], A / INCADR
+ 444:0 |  222 | 80 52 ; mov A, MEM[TMP0]
+ 446:0 |  223 | 80 89 ; mov MEM[ADRREG], A / INCADR
+ 448:0 |  224 | 84 32 ; mov ADRL, MEM[PCL]
+ 44a:0 |  225 | 85 12 ; mov ADRH, MEM[PCH]
+ 44c:0 |  226 | 80 44 ; mov A, ADRL
+ 44e:0 |  227 | 80 a0 ; mov 0, ADRH
+ 450:0 |  228 | 80 88 ; mov MEM[ADRREG], A
+ 452:0 |  229 | 80 86 ; mov MEM[TMP0], ADRL
+ 454:0 |  22a | 80 a0 ; mov 0, ADRH
+ 456:0 |  22b | b0 8c ; clc APLUSB, MEM[ADRREG]
+ 458:0 |  22c | 80 70 ; mov Y, MEM[ADRREG]
+ 45a:0 |  22d | 01 05 ; jmp ALW, fetch

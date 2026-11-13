@@ -32,6 +32,7 @@ jmp ALW, inc_byte
 jmp ALW, inc_word
 jmp ALW, dec_byte
 jmp ALW, dec_word
+jmp ALW, add_byte
 
 ; ucode for the instructions
 #bank ucode
@@ -511,3 +512,28 @@ dec_word:
     mov Y, MEM[ADRREG]          ; save the value high byte back into the register
 
     jmp ALW, fetch
+
+; add two registers together
+add_byte:
+    mov MEM[ADRREG], A / INCADR ; get target register number
+    mov A, MEM[TMP0]            ; save target register number
+
+    mov MEM[ADRREG], A / INCADR ; get source register number
+    
+    mov ADRL, MEM[PCL]          ; save program counter
+    mov ADRH, MEM[PCH]          ;
+
+    mov A, ADRL                 ; put source register number in address register
+    mov 0, ADRH                 ;
+
+    mov MEM[ADRREG], A          ; get value 1
+
+    mov MEM[TMP0], ADRL         ; put target register number in address register
+    mov 0, ADRH                 ;
+
+    clc APLUSB, MEM[ADRREG]     ; add source and target register contents
+    mov Y, MEM[ADRREG]          ; save result back into target register
+
+    jmp ALW, fetch
+
+;
