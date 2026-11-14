@@ -22,6 +22,7 @@
     dew {reg: u8}                               => $10`8 @ reg
 
     add {dst: u8}, {src: u8}                    => $11`8 @ dst @ src
+    adw {dst: u8}, {src: u8}                    => $12`8 @ dst @ src
 }
 
 

@@ -33,6 +33,7 @@ jmp ALW, inc_word
 jmp ALW, dec_byte
 jmp ALW, dec_word
 jmp ALW, add_byte
+jmp ALW, add_word
 
 ; ucode for the instructions
 #bank ucode
@@ -513,7 +514,7 @@ dec_word:
 
     jmp ALW, fetch
 
-; add two registers together
+; add bytes from two registers together
 add_byte:
     mov MEM[ADRREG], A / INCADR ; get target register number
     mov A, MEM[TMP0]            ; save target register number
@@ -526,7 +527,7 @@ add_byte:
     mov A, ADRL                 ; put source register number in address register
     mov 0, ADRH                 ;
 
-    mov MEM[ADRREG], A          ; get value 1
+    mov MEM[ADRREG], A          ; get value from source register
 
     mov MEM[TMP0], ADRL         ; put target register number in address register
     mov 0, ADRH                 ;
@@ -536,4 +537,46 @@ add_byte:
 
     jmp ALW, fetch
 
-;
+; add words from two registers together
+add_word:
+    mov MEM[ADRREG], A / INCADR ; get target register number
+    mov A, MEM[TMP0]            ; save target register number
+
+    mov MEM[ADRREG], A / INCADR ; get source register number
+    
+    mov ADRL, MEM[PCL]          ; save program counter
+    mov ADRH, MEM[PCH]          ;
+
+    mov A, ADRL                 ; put source register number in address register
+    mov 0, ADRH                 ;
+
+    mov MEM[ADRREG], A / INCADR ; get value low byte from source register
+    mov A, MEM[TMP1]            ; save value low byte
+
+    mov MEM[ADRREG], A          ; get value high byte from source register
+    mov A, MEM[TMP2]            ; save value high byte
+
+    mov MEM[TMP0], ADRL         ; put target register number in address register
+    mov 0, ADRH                 ;
+
+    mov MEM[TMP1], A            ; get value low byte
+    clc APLUSB, MEM[ADRREG]     ; add source and target register low bytes
+    mov Y, MEM[ADRREG] / INCADR ; save result back into target register
+
+    mov MEM[TMP2], A            ; get value high byte
+
+    jmp CAR, .overflow          ; if there was an overflow, wee ned to add one to the high byte
+
+    clc APLUSB, MEM[ADRREG]     ; add source and target register high bytes
+    mov Y, MEM[ADRREG]          ; save result back into target register
+
+    jmp ALW, fetch
+
+    .overflow:
+    clc APLUSB, 1
+    mov Y, A
+
+    clc APLUSB, MEM[ADRREG]     ; add source and target register high bytes
+    mov Y, MEM[ADRREG]          ; save result back into target register
+
+    jmp ALW, fetch
