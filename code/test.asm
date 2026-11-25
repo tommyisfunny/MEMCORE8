@@ -2,8 +2,8 @@
 
 #bank code
 main:
-    lrw a0, #$01F2
-    lrw a2, #$0313
-    adw a0, a2
+    ldr a0, #$00
+    ldr a2, #$00
+    sub a0, a2
 #addr $01FF
 test: #res 6

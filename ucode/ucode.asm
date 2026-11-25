@@ -34,6 +34,7 @@ jmp ALW, dec_byte
 jmp ALW, dec_word
 jmp ALW, add_byte
 jmp ALW, add_word
+jmp ALW, sub_byte
 
 ; ucode for the instructions
 #bank ucode
@@ -580,3 +581,30 @@ add_word:
     mov Y, MEM[ADRREG]          ; save result back into target register
 
     jmp ALW, fetch
+
+; 
+sub_byte:
+    mov MEM[ADRREG], A / INCADR ; get target register number
+    mov A, MEM[TMP0]            ; save target register number
+
+    mov MEM[ADRREG], A / INCADR ; get source register number
+    
+    mov ADRL, MEM[PCL]          ; save program counter
+    mov ADRH, MEM[PCH]          ;
+
+    mov A, ADRL                 ; put source register number in address register
+    mov 0, ADRH                 ;
+
+    mov MEM[ADRREG], A          ; get value from source register
+    clc AMINUSB, 0              ; subtract one from the source value to compensate for minus calculation lacking a set carry in
+    mov Y, A                    ; put back in A
+
+    mov MEM[TMP0], ADRL         ; put target register number in address register
+    mov 0, ADRH                 ;
+
+    clc BMINUSA, MEM[ADRREG]    ; subtract target from source register contents
+    mov Y, MEM[ADRREG]          ; save result back into target register
+
+    jmp ALW, fetch
+
+

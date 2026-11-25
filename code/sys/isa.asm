@@ -23,6 +23,8 @@
 
     add {dst: u8}, {src: u8}                    => $11`8 @ dst @ src
     adw {dst: u8}, {src: u8}                    => $12`8 @ dst @ src
+
+    sub {dst: u8}, {src: u8}                    => $13`8 @ dst @ src
 }
 
 
